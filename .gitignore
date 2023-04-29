@@ -1,0 +1,15 @@
+/services/authentication/node_modules
+/services/user-management/node_modules
+/services/product-management/node_modules
+/services/cart-management/node_modules
+/services/order-management/node_modules
+/services/authentication/dist
+/services/user-management/dist
+/services/product-management/dist
+/services/cart-management/dist
+/services/order-management/dist
+/services/authentication/.env
+/services/user-management/.env
+/services/product-management/.env
+/services/cart-management/.env
+/services/order-management/.env
