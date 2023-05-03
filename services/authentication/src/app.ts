@@ -17,12 +17,12 @@ app.use(bodyParser.json());
 if (process.env.ENV === "dev") app.use(morgan("dev"));
 
 connectDatabase();
-const rabbitMQClient = new RabbitMQClient()
+
 
 app.use("/api/v1/auth", authRoute);
 
 app.get('/test', (req: Request, res: Response)=> {
-    rabbitMQClient.produce(req.body)
+    RabbitMQClient.produce(req.body)
 })
 
 app.use((req: Request, res: Response) => {
@@ -34,5 +34,5 @@ app.use(errorHandler);
 const port: any = process.env.PORT
 app.listen(port, () => {
     console.log(`Server running... ${port}`)
-    rabbitMQClient.initialize()
+    RabbitMQClient.initialize()
 })
