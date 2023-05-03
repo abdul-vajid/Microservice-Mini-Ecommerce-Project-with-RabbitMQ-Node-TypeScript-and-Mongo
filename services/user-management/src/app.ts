@@ -7,6 +7,7 @@ import connectDatabase from './config/database.ts'
 import errorHandler from './handlers/errorHandler.ts';
 import userRoutes from './routers/userRoutes.ts'
 import consumeMessages from './consumer/testConsumer.ts';
+import rabbitMqClient from './rabbitmq/client.ts';
 
 const app = express();
 // app.use(corsMiddleware);
@@ -33,4 +34,5 @@ app.use(errorHandler);
 const port : any = process.env.PORT
 app.listen(port, () => {
     console.log(`Server running... ${port}`)
+    rabbitMqClient.initialize()
 })
