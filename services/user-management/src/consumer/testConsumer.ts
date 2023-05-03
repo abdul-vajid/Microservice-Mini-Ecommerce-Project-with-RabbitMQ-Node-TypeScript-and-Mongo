@@ -1,4 +1,5 @@
 import {connect} from "amqplib";
+import User from "../models/userModel.ts"
 
 async function consumeMessages() {
     try {
@@ -15,7 +16,7 @@ async function consumeMessages() {
        
         const q = await channel.assertQueue("InfoQueue");
         
-        await channel.bindQueue(q.queue, "logExchange", "Info").catch((error)=> {
+        await channel.bindQueue(q.queue, "logExchange", "save-userData").catch((error)=> {
             throw `from bindque ${error}`
         });
 

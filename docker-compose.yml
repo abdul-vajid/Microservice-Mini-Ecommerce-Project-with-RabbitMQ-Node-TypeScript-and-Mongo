@@ -11,12 +11,12 @@ services:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: password
     healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
+      test: [ "CMD", "rabbitmqctl", "status" ]
       interval: 30s
       timeout: 10s
       retries: 5
     networks:
-      - localnews-network
+      - ecom-rabbit-ts-network
 
   auth-db:
     container_name: auth-db
@@ -26,7 +26,7 @@ services:
     volumes:
       - auth-data:/data/db
     networks:
-      - localnews-network
+      - ecom-rabbit-ts-network
 
   authentication:
     container_name: authentication
@@ -37,13 +37,13 @@ services:
       - "3003:3000"
     environment:
       - PORT=3000
-      - MONGO_URI=mongodb://auth-db:27017/localnews
+      - MONGO_URI=mongodb://auth-db:27017/ecom-rabbit-ts
       - MESSAGE_BUS=amqp://rabbitmq
     depends_on:
-      - rabbitmq
-      - auth-db
+      rabbitmq:
+        condition: service_healthy
     networks:
-      - localnews-network
+      - ecom-rabbit-ts-network
 
   user-db:
     container_name: user-db
@@ -53,7 +53,7 @@ services:
     volumes:
       - user-data:/data/db
     networks:
-      - localnews-network
+      - ecom-rabbit-ts-network
 
   user-management:
     container_name: user-management
@@ -64,13 +64,13 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
-      - MONGO_URI=mongodb://user-db:27017/localnews
+      - MONGO_URI=mongodb://user-db:27017/ecom-rabbit-ts
       - MESSAGE_BUS=amqp://rabbitmq
     depends_on:
       rabbitmq:
         condition: service_healthy
     networks:
-      - localnews-network
+      - ecom-rabbit-ts-network
 
   product-db:
     container_name: product-db
@@ -80,7 +80,7 @@ services:
     volumes:
       - product-data:/data/db
     networks:
-      - localnews-network
+      - ecom-rabbit-ts-network
 
   product-management:
     container_name: product-management
@@ -91,27 +91,26 @@ services:
       - "3001:3000"
     environment:
       - PORT=3000
-      - MONGO_URI=mongodb://product-db:27017/localnews
+      - MONGO_URI=mongodb://product-db:27017/ecom-rabbit-ts
       - MESSAGE_BUS=amqp://rabbitmq
     depends_on:
       - rabbitmq
       - product-db
     networks:
-      - localnews-network
+      - ecom-rabbit-ts-network
 
 volumes:
   auth-data:
   user-data:
   product-data:
 
+
 networks:
-  localnews-network:
+  ecom-rabbit-ts-network:
     driver: bridge
     ipam:
       config:
         - subnet: "192.168.0.0/24"
-
-
   # user-management:
   #   container_name: user-management
   #   build:
@@ -121,13 +120,13 @@ networks:
   #     - "3002:3000"
   #   environment:
   #     - PORT=3000
-  #     - MONGO_URI=mongodb://users-db:27017/localnews
+  #     - MONGO_URI=mongodb://users-db:27017/ecom-rabbit-ts
   #     - MESSAGE_BUS=amqp://rabbitmq
   #   links:
   #     - rabbitmq
   #     - users-db
   #   networks:
-  #     - localnews-network
+  #     - ecom-rabbit-ts-network
 
 
 
@@ -139,15 +138,15 @@ networks:
   #   environment:
   #     - MESSAGE_BUS=amqp://rabbitmq
   #     - EMAIL_SERVICE=gmail
-  #     - EMAIL_ID=noreply.localnewsapplication@gmail.com
+  #     - EMAIL_ID=noreply.ecom-rabbit-tsapplication@gmail.com
   #     - EMAIL_PASSWORD=Testing0*
-  #     - ADMIN_EMAIL=localnewsapp340ct@gmail.com
-  #     - MONGO_URI=mongodb://notification-db:27017/localnews
+  #     - ADMIN_EMAIL=ecom-rabbit-tsapp340ct@gmail.com
+  #     - MONGO_URI=mongodb://notification-db:27017/ecom-rabbit-ts
   #   links:
   #     - rabbitmq
   #     - notification-db
   #   networks:
-  #     - localnews-network
+  #     - ecom-rabbit-ts-network
 
   # users-db:
   #   container_name: users-db
@@ -157,7 +156,7 @@ networks:
   #   volumes:
   #     - users-data:/data/db
   #   networks:
-  #     - localnews-network
+  #     - ecom-rabbit-ts-network
 
   # notification-db:
   #   container_name: notification-db
@@ -167,4 +166,4 @@ networks:
   #   volumes:
   #     - notification-data:/data/db
   #   networks:
-  #     - localnews-network
+  #     - ecom-rabbit-ts-network

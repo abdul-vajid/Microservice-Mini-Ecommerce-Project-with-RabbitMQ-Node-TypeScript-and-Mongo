@@ -1,11 +1,6 @@
 import { Channel, connect } from "amqplib";
 import {rabbitMQConfig} from '../config/rabbitmq'
 
-//step 1 : Connect to the rabbitmq server
-//step 2 : Create a new channel on that connection
-//step 3 : Create the exchange
-//step 4 : Publish the message to the exchange with a routing key
-
 class Producer {
   Channel: any;
 

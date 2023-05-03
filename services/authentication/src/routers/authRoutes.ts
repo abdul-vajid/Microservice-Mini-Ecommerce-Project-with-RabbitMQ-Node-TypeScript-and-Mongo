@@ -1,13 +1,13 @@
 import express from "express";
-import {Request, Response, NextFunction} from 'express';
+import { Request, Response, NextFunction } from 'express';
 import {
-    helloWorld
+    registerUser
 } from '../controllers/authController.ts'
 
 
 
 const router = express.Router();
 
-router.post('/', helloWorld);
+router.post('/', registerUser);
 
 export default router;

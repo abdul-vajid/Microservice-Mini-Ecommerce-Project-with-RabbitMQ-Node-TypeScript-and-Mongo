@@ -9,7 +9,7 @@
     "allowImportingTsExtensions": true,
     "moduleResolution": "nodenext",
     "noImplicitAny": true,
-    "strict": true,
+    "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true
   },

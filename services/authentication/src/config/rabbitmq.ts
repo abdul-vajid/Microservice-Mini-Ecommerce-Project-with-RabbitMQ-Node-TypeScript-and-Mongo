@@ -5,5 +5,5 @@ interface RabbitMQ {
 
 export const rabbitMQConfig: RabbitMQ = {
     url: "amqp://admin:password@rabbitmq:5672/",
-    exchangeName: "logExchange",
+    exchangeName: "logExchange"
 };
