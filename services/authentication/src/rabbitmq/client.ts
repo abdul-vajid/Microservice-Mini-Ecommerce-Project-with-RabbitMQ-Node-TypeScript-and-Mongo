@@ -3,12 +3,13 @@ import config from '../config/rabbitmqQueues'
 import Consumer from './consumer';
 import Producer from './producer';
 import { rabbitMQConfig } from '../config/rabbitmq';
+import { EventEmitter } from 'events';
 
 class RabbitMQClient {
 
-    private constructor(){};
+    private constructor() { };
 
-    private static instance: RabbitMQClient; 
+    private static instance: RabbitMQClient;
     private isInitialized: boolean = false;
 
     private producer: Producer;
@@ -17,15 +18,17 @@ class RabbitMQClient {
     private producerChannel: Channel;
     private consumerChannel: Channel;
 
-    public static getInstance(){
-        if(!this.instance){
+    private eventEmitter: EventEmitter
+
+    public static getInstance() {
+        if (!this.instance) {
             this.instance = new RabbitMQClient();
         }
         return this.instance;
     }
 
     async initialize() {
-        if(this.isInitialized){
+        if (this.isInitialized) {
             return;
         }
         try {
@@ -36,8 +39,8 @@ class RabbitMQClient {
 
             const { queue: replyQueueName } = await this.consumerChannel.assertQueue('', { exclusive: true });
 
-            this.producer = new Producer(this.producerChannel, replyQueueName)
-            this.consumer = new Consumer(this.consumerChannel, replyQueueName);
+            this.producer = new Producer(this.producerChannel, replyQueueName, this.eventEmitter);
+            this.consumer = new Consumer(this.consumerChannel, replyQueueName, this.eventEmitter);
 
             this.consumer.consumeMessages()
             this.isInitialized = true;
@@ -47,7 +50,7 @@ class RabbitMQClient {
     }
 
     async produce(data: any) {
-        if(!this.isInitialized){
+        if (!this.isInitialized) {
             await this.initialize()
         }
         return await this.producer.produceMessage(data);
