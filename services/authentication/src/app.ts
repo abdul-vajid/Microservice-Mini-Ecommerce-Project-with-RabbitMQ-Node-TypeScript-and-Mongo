@@ -21,12 +21,6 @@ connectDatabase();
 
 app.use("/api/v1/auth", authRoute);
 
-app.post('/test', (req: Request, res: Response)=> {
-    console.log('req.body from auth-service test api ',req.body)
-    const response: any = RabbitMQClient.produce(req.body);
-    res.status(201).send(response);
-})
-
 app.use((req: Request, res: Response) => {
     res.status(404).json({ success: false, status: 404, message: "Not found" });
 });

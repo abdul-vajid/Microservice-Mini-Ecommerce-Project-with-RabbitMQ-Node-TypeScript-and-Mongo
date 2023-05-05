@@ -12,6 +12,7 @@ class RabbitMQClient {
 
     private producer: Producer;
     private consumer: Consumer;
+    private replyConsumer: Consumer;
     private connection: Connection;
     private producerChannel: Channel;
     private consumerChannel: Channel;
@@ -33,10 +34,12 @@ class RabbitMQClient {
             this.producerChannel = await this.connection.createChannel();
             this.consumerChannel = await this.connection.createChannel();
 
-            const { queue: rpcQueue } = await this.consumerChannel.assertQueue(config.rabbitMq.queues.rpcQueue, { exclusive: true });
+            const { queue: queue } = await this.consumerChannel.assertQueue(config.rabbitMq.queues.userQueue, { exclusive: true });
+            const { queue: replayQueue } = await this.consumerChannel.assertQueue('', { exclusive: true });
 
             this.producer = new Producer(this.producerChannel)
-            this.consumer = new Consumer(this.consumerChannel, rpcQueue);
+            this.consumer = new Consumer(this.consumerChannel, queue);
+            this.replyConsumer = new Consumer(this.consumerChannel, replayQueue);
 
             this.consumer.consumeMessages()
             this.isInitialized = true;

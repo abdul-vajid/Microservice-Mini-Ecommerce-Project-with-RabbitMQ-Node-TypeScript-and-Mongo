@@ -1,3 +1,4 @@
+import { saveUserInfoInDb } from '../sevices/messageHandlerServices/saveUserInfo';
 import rabbitMQClient from './client'
 
 export default class MessageHandler {
@@ -10,9 +11,8 @@ export default class MessageHandler {
         let response = {}
         console.log('the operation is', operation);
         switch (operation) {
-            case 'addUser':
-                response = 'user added'
-                console.log('user added in test case....');
+            case 'register':
+                response = await saveUserInfoInDb(data)
                 break;
             case 'removeUser':
                 response = 'user removed'

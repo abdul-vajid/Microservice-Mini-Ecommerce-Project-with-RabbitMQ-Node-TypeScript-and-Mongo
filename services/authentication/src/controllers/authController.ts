@@ -2,8 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { UserSchema } from '../utils/validators/UserSchema.ts';
 import User from '../models/authModel.ts'
 import ErrorResponse from '../utils/handlers/ErrorResponse.ts';
-import Producer from '../producers/RabbitMQProducer.ts';
-import { ValidationError } from 'joi';
+// import Producer from '../producers/RabbitMQProducer.ts';
+// import { ValidationError } from 'joi';
+import RabbitMQClient from '../rabbitmq/client.ts';
+import config from '../config/rabbitmqQueues.ts';
 import bcrypt from "bcryptjs";
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -16,15 +18,13 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
         }
 
         const user = await User.findOne({ email: data.email })
-        if (user){
+        if (user) {
             return next(ErrorResponse.badRequest('Email already registered'));
         }
-        // const saltRounds: number = Number(process.env.SALT_ROUNDS) || 10;
-        // const saltRounds: number = await bcrypt.genSalt(parseInt(process.env.SALT_ROUNDS || 10));
+
         const saltRounds: number = Number(process.env.SALT_ROUNDS) || 10;
         const generatedSalt: string = await bcrypt.genSalt(saltRounds);
         hashedPassword = await bcrypt.hash(data.password, generatedSalt);
-        // hashedPassword = data.password 
     } catch (error) {
         return next(error)
     }
@@ -43,22 +43,23 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
     }
 
     try {
-        const producer = new Producer()
-        await producer.publishMessage('save-userData', {
+        const result: any = await RabbitMQClient.produce({
+            userId: savedData._id,
+            email: savedData.email,
             fullname: data.fullname,
             phoneNumber: data.phoneNumber,
             city: data.city,
-            country: data.country,
-        });
-        if (savedData) {
-            res.status(201).send({
+            country: data.country
+        }, config.rabbitMq.queues.userQueue, "register");
+        console.log("Result from User in Auth is ", result);
+        if (result.isError === true) {
+            next(ErrorResponse.forbidden(result.message));
+        } else {
+            return res.status(201).send({
                 success: true,
                 status: 201,
                 message: "Account created successfully",
-                data: {
-                    email: savedData.email,
-                    fullname: savedData.fullname
-                }
+                data: result
             })
         }
     } catch (error) {

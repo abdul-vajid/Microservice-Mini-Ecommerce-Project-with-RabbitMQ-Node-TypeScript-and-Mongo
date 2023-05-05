@@ -2,7 +2,6 @@ import { Channel, Connection, connect } from 'amqplib'
 import config from '../config/rabbitmqQueues'
 import Consumer from './consumer';
 import Producer from './producer';
-import { rabbitMQConfig } from '../config/rabbitmq';
 import { EventEmitter } from 'events';
 
 class RabbitMQClient {
@@ -33,6 +32,8 @@ class RabbitMQClient {
         }
         try {
             this.connection = await connect(config.rabbitMq.url);
+            
+            this.eventEmitter = new EventEmitter();
 
             this.producerChannel = await this.connection.createChannel();
             this.consumerChannel = await this.connection.createChannel();
@@ -49,11 +50,14 @@ class RabbitMQClient {
         }
     }
 
-    async produce(data: any) {
+    async produce(data: any, targetQueue: string, operation: string) {
         if (!this.isInitialized) {
+            console.log("Not initialized");
+            
             await this.initialize()
         }
-        return await this.producer.produceMessage(data);
+        console.log("Producing data");
+        return await this.producer.produceMessage(data, targetQueue, operation);
     }
 }
 

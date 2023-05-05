@@ -49,7 +49,7 @@ services:
     container_name: user-db
     image: mongo
     ports:
-      - "27017:27017"
+      - "27021:27017"
     volumes:
       - user-data:/data/db
     networks:
@@ -72,37 +72,37 @@ services:
     networks:
       - ecom-rabbit-ts-network
 
-  product-db:
-    container_name: product-db
-    image: mongo
-    ports:
-      - "27018:27017"
-    volumes:
-      - product-data:/data/db
-    networks:
-      - ecom-rabbit-ts-network
+  # product-db:
+  #   container_name: product-db
+  #   image: mongo
+  #   ports:
+  #     - "27018:27017"
+  #   volumes:
+  #     - product-data:/data/db
+  #   networks:
+  #     - ecom-rabbit-ts-network
 
-  product-management:
-    container_name: product-management
-    build:
-      context: ./services/product-management
-      dockerfile: Dockerfile
-    ports:
-      - "3001:3000"
-    environment:
-      - PORT=3000
-      - MONGO_URI=mongodb://product-db:27017/ecom-rabbit-ts
-      - MESSAGE_BUS=amqp://rabbitmq
-    depends_on:
-      - rabbitmq
-      - product-db
-    networks:
-      - ecom-rabbit-ts-network
+  # product-management:
+  #   container_name: product-management
+  #   build:
+  #     context: ./services/product-management
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3001:3000"
+  #   environment:
+  #     - PORT=3000
+  #     - MONGO_URI=mongodb://product-db:27017/ecom-rabbit-ts
+  #     - MESSAGE_BUS=amqp://rabbitmq
+  #   depends_on:
+  #     - rabbitmq
+  #     - product-db
+  #   networks:
+  #     - ecom-rabbit-ts-network
 
 volumes:
   auth-data:
   user-data:
-  product-data:
+  # product-data:
 
 
 networks:

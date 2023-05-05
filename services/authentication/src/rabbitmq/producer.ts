@@ -1,33 +1,37 @@
 import { Channel } from "amqplib";
 import { randomUUID } from "crypto";
-import config from '../config/rabbitmqQueues'
-import EventEmitter from "events";
+import { EventEmitter } from "events";
 
 export default class Producer {
     constructor(private channel: Channel, private replyQueueName: string, private eventEmitter: EventEmitter) { }
 
-    async produceMessage(data: any) {
+    async produceMessage(data: any, targetQueue: string, operation: string) {
+        try {
         const uuid = randomUUID()
-        console.log('This is uuid : ', uuid);
-        console.log('data from Producer class : ', data);
 
-        this.channel.sendToQueue(
-            config.rabbitMq.queues.rpcQueue,
+        const isSuccess = this.channel.sendToQueue(
+            targetQueue,
             Buffer.from(JSON.stringify(data)),
             {
                 replyTo: this.replyQueueName,
                 correlationId: uuid,
                 headers: {
-                    function: data.operation
+                    function: operation
                 }
             }
         )
+        console.log(`Sending message to ${targetQueue} is ${isSuccess}`);
+        
 
         return new Promise((resolve, rejects) => {
             this.eventEmitter.once(uuid, (data) => {
+                console.log("Data recivied from emitter is", data);
                 const reply: any = JSON.parse(data.content.toString());
                 resolve(reply)
             })
         })
+    } catch(err) {
+        throw new Error("Error inside Auth producer")
+    }
     }
 }
