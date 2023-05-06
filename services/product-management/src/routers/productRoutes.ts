@@ -1,15 +1,18 @@
 import express from "express";
-import {Request, Response, NextFunction} from 'express';
 import {
-    helloWorld
+    addProduct,
+    getProducts,
+    searchProduct
 } from '../controllers/productController.ts'
 
 
 
 const router = express.Router();
 
-router.post('/', (req: Request, res: Response, next: NextFunction) => {
-    helloWorld(req, res, next);
-});
+router.post('/addProduct', addProduct);
+
+router.get('/getProducts', getProducts);
+
+router.get('/searchProduct/:search', searchProduct)
 
 export default router;

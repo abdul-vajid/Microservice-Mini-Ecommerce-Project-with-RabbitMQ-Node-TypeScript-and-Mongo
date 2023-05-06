@@ -1,4 +1,3 @@
-import { saveUserInfoInDb } from '../sevices/messageHandlerServices/saveUserInfo';
 import rabbitMQClient from './client'
 
 export default class MessageHandler {
@@ -12,9 +11,9 @@ export default class MessageHandler {
         console.log('the operation is', operation);
         switch (operation) {
             case 'register':
-                response = await saveUserInfoInDb(data)
+                response = 'response from reply consumer message handler in product management';
                 break;
-            case 'getCartdetails':
+            case 'removeUser':
                 response = 'user removed'
                 console.log('user removed n test case');
                 break;
@@ -23,6 +22,6 @@ export default class MessageHandler {
                 break;
         }
 
-        await rabbitMQClient.produce(response, correlationId, replyTo)
+        await rabbitMQClient.produceReply(response, correlationId, replyTo)
     }
 }

@@ -1,17 +1,45 @@
 import { Request, Response, NextFunction } from 'express';
-import  Producer from '../producers/RabbitMQProducer.ts';
+import Producer from '../producers/RabbitMQProducer.ts';
 import { rabbitMQConfig } from '../config/rabbitmq.ts';
-// import bcrypt from "bcrypt";
-// import jwt from "jsonwebtoken";
+import Product from '../models/productModel.ts';
+import ErrorResponse from '../handlers/ErrorResponse.ts';
 
 
-export const helloWorld = async (req: Request, res: Response, next: NextFunction) => {
+export const addProduct = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const message: string = "Hello world i'm from product-service => app.ts => productRouter.ts => productController.ts";
-        const producer = new Producer();
-        await producer.publishMessage(req.body.logType, req.body.message);
-        console.log("message is send");
-        res.status(200).send({ success: true, status: 200, data: message })
+        const newProduct = new Product({
+            productName: req.body.productName,
+            category: req.body.category,
+            amount: req.body.amount,
+        });
+        await newProduct.save();
+        res.status(200).send({ success: true, status: 200, message: 'Product added successfully' })
+    } catch (error) {
+        return next(error)
+    }
+}
+
+export const getProducts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const products = await Product.find({});
+        if (!products) {
+            return ErrorResponse.notFound("Products not available")
+        }
+        res.status(200).send({ success: true, status: 200, data: products })
+    } catch (error) {
+        return next(error)
+    }
+}
+
+export const searchProduct = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        console.log("req.params.search.toLowerCase()   : ", req.params.search.toLowerCase());
+
+        const products = await Product.find({ productName: req.params.search.toLowerCase() });
+        if (!products) {
+            return ErrorResponse.notFound("Product not found")
+        }
+        res.status(200).send({ success: true, status: 200, data: products })
     } catch (error) {
         return next(error)
     }
