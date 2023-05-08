@@ -3,6 +3,7 @@ import config from '../config/rabbitmqQueues.ts';
 import Cart from '../models/cartModel.ts';
 import ErrorResponse from '../handlers/ErrorResponse.ts';
 import RabbitMQClient from '../rabbitmq/client.ts';
+import { produceForCartDetails } from '../services/producerServices/toProductQueue.ts';
 
 
 
@@ -42,17 +43,15 @@ export const addToCart = async (
 export const getCart = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.params.userId;
-        console.log('req.params.userId' , req.params.userId);
-        
+        console.log('req.params.userId', req.params.userId);
+
         const cart = await Cart.findOne({ userId: userId });
         if (!cart) {
             return ErrorResponse.notFound("Your cart is empty")
         }
         console.log('Debug No : 1');
-        
-        const result: any = await RabbitMQClient.produceAndWaitForReply({
-            products: cart.products
-        }, config.rabbitMq.queues.productQueue, "getProductDetails");
+
+        const result: any = await produceForCartDetails(cart)
         console.log('consoled result which is get from product service as result of produce method inside get cart api', result)
         res.status(201).send({ success: true, status: 201, data: result });
     } catch (error) {

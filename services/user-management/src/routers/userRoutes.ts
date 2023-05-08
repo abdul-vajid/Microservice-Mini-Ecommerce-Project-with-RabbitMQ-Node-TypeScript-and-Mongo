@@ -1,10 +1,11 @@
-import express, {Request, Response, NextFunction} from "express";
+import express from "express";
+// import {
+//     registerUser
+// } from '../controllers/userController.ts'
 
 const router = express.Router()
 
-router.get('/', (req: Request, res: Response, next: NextFunction)=> {
-    res.send("Im from users management")
-})
+// router.post('/register', registerUser)
 
 
 export default router

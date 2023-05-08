@@ -1,3 +1,4 @@
+import { getProductDetails } from '../services/messageHandlerServices/getCartDetails';
 import rabbitMQClient from './client'
 
 export default class MessageHandler {
@@ -10,8 +11,10 @@ export default class MessageHandler {
         let response = {}
         console.log('the operation is', operation);
         switch (operation) {
-            case 'register':
-                response = 'response from reply consumer message handler in product management';
+            case 'getCartDetails':
+                console.log("insside message handler, case : getCartDetails, consoling data : ", data)
+                console.log("insside message handler, case : getCartDetails, consoling data.userId : ", data.userId)
+                response = await getProductDetails(data);
                 break;
             case 'removeUser':
                 response = 'user removed'

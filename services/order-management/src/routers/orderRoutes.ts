@@ -1,11 +1,11 @@
 import express from "express";
 import {
-    addToCart
+    makeAnOrder
 } from '../controllers/orderController.ts'
 
 const router = express.Router();
 
-router.post('/addToCart', addToCart);
+router.post('/makeAnOrder', makeAnOrder);
 
 
 export default router;

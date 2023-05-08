@@ -2,12 +2,12 @@ import { Channel, ConsumeMessage } from "amqplib";
 import MessageHandler from "./messageHandler";
 
 export default class ReplyConsumer {
-    constructor(private channel: Channel, private rpcQueue: string) { }
+    constructor(private channel: Channel, private queue: string) { }
 
     async consumeMessages() {
-        console.log('Product Service ReplyConsumer: ready to consume messages....', this.rpcQueue);
+        console.log('Product Service ReplyConsumer: ready to consume messages....', this.queue);
 
-        this.channel.consume(this.rpcQueue,
+        this.channel.consume(this.queue,
             async (message: ConsumeMessage) => {
                 console.log('Debug No : 5');
                 const { correlationId, replyTo } = message.properties
