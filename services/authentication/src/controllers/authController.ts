@@ -67,3 +67,20 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
     }
     return next(ErrorResponse.badRequest('Something went wrong, try again!'));
 }
+
+export const checkUserCredentials = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) {
+            return next(ErrorResponse.notFound('User not found'));
+        }
+
+        const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+        if (!passwordMatch) {
+            return next(ErrorResponse.unauthorized('Invalid password'))
+        }
+        res.status(200).send({ satus: 200, success: true, userId: user._id })
+    } catch (error) {
+        return next(error)
+    }
+}
