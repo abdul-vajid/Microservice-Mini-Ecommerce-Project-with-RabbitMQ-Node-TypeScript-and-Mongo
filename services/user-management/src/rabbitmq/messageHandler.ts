@@ -1,3 +1,4 @@
+import { getUserDetails } from '../sevices/messageHandlerServices/getUserDetails';
 import { saveUserInfoInDb } from '../sevices/messageHandlerServices/saveUserInfo';
 import rabbitMQClient from './client'
 
@@ -14,8 +15,8 @@ export default class MessageHandler {
             case 'register':
                 response = await saveUserInfoInDb(data)
                 break;
-            case 'getCartdetails':
-                response = 'user removed'
+            case 'getUserDetails':
+                response = await getUserDetails(data);
                 console.log('user removed n test case');
                 break;
             default:

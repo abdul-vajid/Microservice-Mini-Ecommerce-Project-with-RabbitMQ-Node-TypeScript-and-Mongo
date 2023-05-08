@@ -7,6 +7,16 @@ const orderSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
+        orderNo: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        address: {
+            type: String,
+            required: true,
+            trim: true,
+        },
         products: [{
             productId: mongoose.Types.ObjectId,
             count: Number,

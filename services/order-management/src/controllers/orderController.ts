@@ -12,13 +12,28 @@ export const makeAnOrder = async (
     next: NextFunction
 ) => {
     try {
-        const {userId, address, orderId} = req.body
+        const { userId, address } = req.body
         console.log("Degub order api 1, userId : ", userId);
         const products: any = await RabbitMQClient.produceAndWaitForReply({
             userId: userId
         }, config.rabbitMq.queues.cartQueue, "getCartDetails");
-        res.status(200).send({ status: 200, success: true, data: products })
+
+        const user: any = await RabbitMQClient.produceAndWaitForReply({
+            userId: userId
+        }, config.rabbitMq.queues.userQueue, "getUserDetails");
+
+        const orderNo: string = "Ecom" + Math.floor(100 + Math.random() * 900).toString()
+
+        const order = new Order({
+            userId: userId,
+            orderNo: orderNo,
+            address: address,
+            products: products
+        })
+        await order.save()
+        res.status(200).send({ status: 200, success: true, message: "Order created successfully!", orderNo: order.orderNo })
     } catch (error) {
-        return next(error);
+        console.log(error);
+        ErrorResponse.internalError("something went wrong")
     }
 };
