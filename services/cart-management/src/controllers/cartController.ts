@@ -53,7 +53,7 @@ export const getCart = async (req: Request, res: Response, next: NextFunction) =
 
         const result: any = await produceForCartDetails(cart)
         console.log('consoled result which is get from product service as result of produce method inside get cart api', result)
-        res.status(201).send({ success: true, status: 201, data: result });
+        res.status(201).send({ success: true, status: 201, cartId: cart._id, data: result });
     } catch (error) {
         return next(error)
     }
