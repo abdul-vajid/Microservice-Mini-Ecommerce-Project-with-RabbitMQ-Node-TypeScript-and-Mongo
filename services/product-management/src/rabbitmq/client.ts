@@ -1,5 +1,5 @@
 import { Channel, Connection, connect } from 'amqplib'
-import config from '../config/rabbitmqQueues'
+import config from '../config/rabbitmq.config'
 import EmitingConsumer from './emitingConsumer';
 import Producer from './producer';
 import { EventEmitter } from 'events';
@@ -11,14 +11,12 @@ class RabbitMQClient {
 
     private static instance: RabbitMQClient;
     private isInitialized: boolean = false;
-
     private producer: Producer;
     private replyConsumer: ReplyConsumer;
     private emitingConsumer: EmitingConsumer;
     private connection: Connection;
     private producerChannel: Channel;
     private consumerChannel: Channel;
-
     private eventEmitter: EventEmitter
 
     public static getInstance() {
@@ -57,11 +55,8 @@ class RabbitMQClient {
 
     async produceAndWaitForReply(data: any, targetQueue: string, operation: string) {
         if (!this.isInitialized) {
-            console.log("Not initialized");
-
             await this.initialize()
         }
-        console.log("Producing data");
         return await this.producer.waitingProducer(data, targetQueue, operation);
     }
 

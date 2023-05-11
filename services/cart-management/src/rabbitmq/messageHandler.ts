@@ -12,16 +12,10 @@ export default class MessageHandler {
         console.log('the operation is', operation);
         switch (operation) {
             case 'getCartDetails':
-                console.log("insside message handler, case : getCartDetails, consoling data : ", data)
-                console.log("insside message handler, case : getCartDetails, consoling data.userId : ", data.userId)
                 response = await getProductDetails(data);
                 break;
-            case 'removeUser':
-                response = 'user removed'
-                console.log('user removed n test case');
-                break;
             default:
-                response = 'default worked'
+                response = 'Request-key notfound'
                 break;
         }
 

@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import config from '../config/rabbitmqQueues.ts';
 import Cart from '../models/cartModel.ts';
 import ErrorResponse from '../handlers/ErrorResponse.ts';
-import RabbitMQClient from '../rabbitmq/client.ts';
 import { produceForCartDetails } from '../services/producerServices/toProductQueue.ts';
 
 
@@ -58,15 +56,3 @@ export const getCart = async (req: Request, res: Response, next: NextFunction) =
         return next(error)
     }
 }
-
-// export const searchProduct = async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const products = await Product.find({ productName: req.params.search.toLowerCase() });
-//         if (!products) {
-//             return ErrorResponse.notFound("Product not found")
-//         }
-//         res.status(200).send({ success: true, status: 200, data: products })
-//     } catch (error) {
-//         return next(error)
-//     }
-// }

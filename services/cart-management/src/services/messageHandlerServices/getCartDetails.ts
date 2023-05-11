@@ -4,11 +4,8 @@ import { produceForCartDetails } from "../producerServices/toProductQueue";
 
 export const getProductDetails = async (message: any) => {
         try {
-            console.log(">> >> >> >> inside getProductDetails : first line ");
-            console.log(">> >> >> >> message.userId", message.userId);
             const userId =  message.userId
             const cart = await Cart.findOne({ userId: userId });
-            console.log(">> >> >> >> console cart inside getProductDetails : ", cart);
             if (!cart) {
                 return ErrorResponse.notFound("Your cart is empty")
             }

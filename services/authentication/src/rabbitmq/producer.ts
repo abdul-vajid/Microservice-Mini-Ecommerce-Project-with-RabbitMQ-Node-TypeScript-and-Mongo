@@ -25,7 +25,6 @@ export default class Producer {
 
         return new Promise((resolve, rejects) => {
             this.eventEmitter.once(uuid, (data) => {
-                console.log("Data recivied from emitter is", data);
                 const reply: any = JSON.parse(data.content.toString());
                 resolve(reply)
             })

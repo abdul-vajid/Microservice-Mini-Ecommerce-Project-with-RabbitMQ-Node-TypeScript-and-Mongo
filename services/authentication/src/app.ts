@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import dotenv from "dotenv";
 import RabbitMQClient from './rabbitmq/client.ts'
-import connectDatabase from './config/database.ts'
+import connectDatabase from './config/database.config.ts'
 // import { corsMiddleware } from './middlewares/cors.ts'
 import errorHandler from './utils/handlers/errorHandler.ts';
 import authRoute from './routers/authRoutes.ts'

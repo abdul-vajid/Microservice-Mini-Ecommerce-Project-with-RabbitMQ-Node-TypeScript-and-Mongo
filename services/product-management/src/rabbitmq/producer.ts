@@ -20,12 +20,8 @@ export default class Producer {
                     }
                 }
             )
-            console.log(`Sending message to ${targetQueue} is ${isSuccess}`);
-
-
             return new Promise((resolve, rejects) => {
                 this.eventEmitter.once(uuid, (data) => {
-                    console.log("Data recivied from emitter is", data);
                     const reply: any = JSON.parse(data.content.toString());
                     resolve(reply)
                 })
@@ -36,8 +32,6 @@ export default class Producer {
     }
 
     async produceToReplyQue(data: any, correlationId: string, replyToQueue: string) {
-        console.log("Sending data to ", replyToQueue);
-
         this.channel.sendToQueue(
             replyToQueue,
             Buffer.from(JSON.stringify(data)),

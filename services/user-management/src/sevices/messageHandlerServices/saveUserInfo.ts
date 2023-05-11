@@ -9,10 +9,6 @@ export const saveUserInfoInDb = async (message: any) => {
     }
     let response: Response = { isError: false }
     try {
-        console.log('inside try save user info in user db');
-        console.log('log message.content in save user in user db function ', message.content);
-        console.log('log msg in save user in user db function ', message,);
-
         const newUser = new User({
             userId: message.userId,
             email: message.email,

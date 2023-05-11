@@ -2,10 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { UserSchema } from '../utils/validators/UserSchema.ts';
 import User from '../models/authModel.ts'
 import ErrorResponse from '../utils/handlers/ErrorResponse.ts';
-// import Producer from '../producers/RabbitMQProducer.ts';
-// import { ValidationError } from 'joi';
 import RabbitMQClient from '../rabbitmq/client.ts';
-import config from '../config/rabbitmqQueues.ts';
+import config from '../config/rabbitmq.config.ts';
 import bcrypt from "bcryptjs";
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {

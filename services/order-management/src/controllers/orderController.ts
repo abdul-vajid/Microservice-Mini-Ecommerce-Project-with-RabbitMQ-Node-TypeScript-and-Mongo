@@ -1,10 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import config from '../config/rabbitmqQueues.ts';
+import config from '../config/rabbitmq.config.ts';
 import Order from '../models/orderModel.ts';
 import ErrorResponse from '../handlers/ErrorResponse.ts';
 import RabbitMQClient from '../rabbitmq/client.ts';
-
-
 
 export const makeAnOrder = async (
     req: Request,
@@ -13,7 +11,6 @@ export const makeAnOrder = async (
 ) => {
     try {
         const { userId, address } = req.body
-        console.log("Degub order api 1, userId : ", userId);
         const products: any = await RabbitMQClient.produceAndWaitForReply({
             userId: userId
         }, config.rabbitMq.queues.cartQueue, "getCartDetails");

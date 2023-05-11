@@ -20,7 +20,7 @@ export default class MessageHandler {
                 console.log('user removed n test case');
                 break;
             default:
-                response = 'default worked'
+                response = 'Request-key not found'
                 break;
         }
 

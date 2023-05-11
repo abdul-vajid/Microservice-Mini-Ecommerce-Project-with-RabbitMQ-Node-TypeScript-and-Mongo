@@ -8,7 +8,6 @@ export default class Producer {
     async waitingProducer(data: any, targetQueue: string, operation: string) {
         try {
             const uuid = randomUUID()
-            console.log('Debug No : 3');
             const isSuccess = this.channel.sendToQueue(
                 targetQueue,
                 Buffer.from(JSON.stringify(data)),
@@ -20,12 +19,8 @@ export default class Producer {
                     }
                 }
             )
-            console.log(`Sending message to ${targetQueue} is ${isSuccess}`);
-
-            console.log('Debug No : 4');
             return new Promise((resolve, rejects) => {
                 this.eventEmitter.once(uuid, (data) => {
-                    console.log("Data recivied from emitter is", data);
                     const reply: any = JSON.parse(data.content.toString());
                     resolve(reply)
                 })
@@ -36,8 +31,6 @@ export default class Producer {
     }
 
     async produceToReplyQue(data: any, correlationId: string, replyToQueue: string) {
-        console.log("Sending data to ", replyToQueue);
-
         this.channel.sendToQueue(
             replyToQueue,
             Buffer.from(JSON.stringify(data)),

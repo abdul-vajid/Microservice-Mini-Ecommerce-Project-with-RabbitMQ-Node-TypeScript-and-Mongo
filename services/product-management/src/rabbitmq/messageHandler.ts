@@ -9,19 +9,12 @@ export default class MessageHandler {
         replyTo: string
     ) {
         let response: any = {}
-        console.log('the operation is', operation);
-        console.log('Debug No : 9');
         switch (operation) {
             case 'getProductDetails':
                 response = await getProductDetails(data.products)
                 break;
-            case 'test':
-                console.log('Debug No : 10');
-                response = 'test'
-                console.log('user removed n test case');
-                break;
             default:
-                response = 'default worked'
+                response = 'Request-key notfound'
                 break;
         }
         await rabbitMQClient.produceReply(response, correlationId, replyTo)

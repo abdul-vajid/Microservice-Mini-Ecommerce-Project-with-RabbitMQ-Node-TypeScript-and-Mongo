@@ -5,8 +5,6 @@ import {
     searchProduct
 } from '../controllers/productController.ts'
 
-
-
 const router = express.Router();
 
 router.post('/addProduct', addProduct);

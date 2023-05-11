@@ -1,5 +1,5 @@
 import { Channel, Connection, connect } from 'amqplib'
-import config from '../config/rabbitmqQueues'
+import config from '../config/rabbitmq.config'
 import Consumer from './consumer';
 import Producer from './producer';
 
@@ -9,7 +9,6 @@ class RabbitMQClient {
 
     private static instance: RabbitMQClient; 
     private isInitialized: boolean = false;
-
     private producer: Producer;
     private consumer: Consumer;
     private replyConsumer: Consumer;
@@ -36,7 +35,6 @@ class RabbitMQClient {
 
             const { queue: queue } = await this.consumerChannel.assertQueue(config.rabbitMq.queues.userQueue, { exclusive: true });
             const { queue: replayQueue } = await this.consumerChannel.assertQueue('', { exclusive: true });
-
             this.producer = new Producer(this.producerChannel)
             this.consumer = new Consumer(this.consumerChannel, queue);
             this.replyConsumer = new Consumer(this.consumerChannel, replayQueue);

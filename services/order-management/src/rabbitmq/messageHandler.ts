@@ -8,17 +8,12 @@ export default class MessageHandler {
         replyTo: string
     ) {
         let response = {}
-        console.log('the operation is', operation);
         switch (operation) {
             case 'register':
                 response = 'response from reply consumer message handler in product management';
                 break;
-            case 'removeUser':
-                response = 'user removed'
-                console.log('user removed n test case');
-                break;
             default:
-                response = 'default worked'
+                response = 'Request-key notfound'
                 break;
         }
 

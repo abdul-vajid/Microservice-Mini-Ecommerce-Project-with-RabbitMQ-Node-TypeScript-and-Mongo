@@ -1,6 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import Producer from '../producers/RabbitMQProducer.ts';
-import { rabbitMQConfig } from '../config/rabbitmq.ts';
 import Product from '../models/productModel.ts';
 import ErrorResponse from '../handlers/ErrorResponse.ts';
 
@@ -33,8 +31,6 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
 
 export const searchProduct = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log("req.params.search.toLowerCase()   : ", req.params.search.toLowerCase());
-
         const products = await Product.find({ productName: req.params.search.toLowerCase() });
         if (!products) {
             return ErrorResponse.notFound("Product not found")
