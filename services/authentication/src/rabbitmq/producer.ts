@@ -20,7 +20,6 @@ export default class Producer {
                 }
             }
         )
-        console.log(`Sending message to ${targetQueue} is ${isSuccess}`);
         
 
         return new Promise((resolve, rejects) => {

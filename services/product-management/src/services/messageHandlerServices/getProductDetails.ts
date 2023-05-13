@@ -3,8 +3,6 @@ import productModel from "../../models/productModel";
 
 export const getProductDetails = async (products: any) => {
     try {
-        console.log('products:', products);
-        console.log('Array.isArray(products):', Array.isArray(products));
         const productIds:any = products.map((product: any) => new mongoose.Types.ObjectId(product.productId));
         const productDetails = await productModel.aggregate([
             { $match: { _id: { $in: productIds } } },

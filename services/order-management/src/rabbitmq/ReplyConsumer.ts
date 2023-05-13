@@ -12,7 +12,6 @@ export default class ReplyConsumer {
                 if (!correlationId || !replyTo) {
                     console.log('Some properties are missing..');
                 } else {
-                    console.log('Consumed : ', JSON.parse(message.content.toString()));
                     await MessageHandler.handle(operation, JSON.parse(message.content.toString()), correlationId, replyTo)
                 }
             }, {

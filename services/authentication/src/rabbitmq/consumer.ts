@@ -6,7 +6,6 @@ export default class Consumer {
 
     async consumeMessages() {
         this.channel.consume(this.replyQueueName, (message: ConsumeMessage) => {
-            console.log(JSON.parse(message.content.toString()), message.properties.correlationId.toString());
             this.eventEmitter.emit(message.properties.correlationId.toString(), message);
         },{
             noAck: true

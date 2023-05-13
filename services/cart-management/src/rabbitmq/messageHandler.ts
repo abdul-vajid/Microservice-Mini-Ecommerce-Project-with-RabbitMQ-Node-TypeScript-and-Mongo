@@ -9,7 +9,6 @@ export default class MessageHandler {
         replyTo: string
     ) {
         let response = {}
-        console.log('the operation is', operation);
         switch (operation) {
             case 'getCartDetails':
                 response = await getProductDetails(data);

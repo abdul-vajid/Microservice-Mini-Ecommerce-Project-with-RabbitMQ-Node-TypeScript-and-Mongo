@@ -10,14 +10,12 @@ export default class MessageHandler {
         replyTo: string
     ) {
         let response = {}
-        console.log('the operation is', operation);
         switch (operation) {
             case 'register':
                 response = await saveUserInfoInDb(data)
                 break;
             case 'getUserDetails':
                 response = await getUserDetails(data);
-                console.log('user removed n test case');
                 break;
             default:
                 response = 'Request-key not found'

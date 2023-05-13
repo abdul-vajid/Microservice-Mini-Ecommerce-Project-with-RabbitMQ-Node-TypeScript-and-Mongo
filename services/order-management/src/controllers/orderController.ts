@@ -30,7 +30,6 @@ export const makeAnOrder = async (
         await order.save()
         res.status(200).send({ status: 200, success: true, message: "Order created successfully!", orderNo: order.orderNo })
     } catch (error) {
-        console.log(error);
         ErrorResponse.internalError("something went wrong")
     }
 };
